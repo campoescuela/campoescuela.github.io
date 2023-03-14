@@ -8,10 +8,11 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="stylesheet" href="css/leaflet.css">
         <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
         <style>
         #map {
-            width: 1233px;
-            height: 698px;
+            width: 1000px;
+            height: 619px;
         }
         </style>
         <title></title>
@@ -28,31 +29,32 @@
         <script src="js/rbush.min.js"></script>
         <script src="js/labelgun.min.js"></script>
         <script src="js/labels.js"></script>
-        <script src="data/MapadeSuelos_1.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="data/MapadeSuelos_0.js"></script>
+        <script src="data/Lotes_1.js"></script>
         <script>
         var map = L.map('map', {
             zoomControl:true, maxZoom:28, minZoom:1
-        }).fitBounds([[-31.48691061065965,-64.04961925187409],[-31.445778396739772,-63.964327132948966]]);
+        }).fitBounds([[-31.48680137032838,-64.04579357797509],[-31.4457966980953,-63.968033530756216]]);
         var hash = new L.Hash(map);
         map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
         var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
         var bounds_group = new L.featureGroup([]);
         function setBounds() {
         }
-        map.createPane('pane_Bing_0');
-        map.getPane('pane_Bing_0').style.zIndex = 400;
-        var layer_Bing_0 = L.tileLayer('http://ecn.t3.tiles.virtualearth.net/tiles/a{q}.jpeg?g=1', {
-            pane: 'pane_Bing_0',
-            opacity: 1.0,
-            attribution: '',
-            minZoom: 1,
-            maxZoom: 28,
-            minNativeZoom: 0,
-            maxNativeZoom: 18
-        });
-        layer_Bing_0;
-        map.addLayer(layer_Bing_0);
-        function pop_MapadeSuelos_1(feature, layer) {
+        function pop_MapadeSuelos_0(feature, layer) {
             var popupContent = '<table>\
                     <tr>\
                         <th scope="row">Name</th>\
@@ -65,9 +67,9 @@
             layer.bindPopup(popupContent, {maxHeight: 400});
         }
 
-        function style_MapadeSuelos_1_0() {
+        function style_MapadeSuelos_0_0() {
             return {
-                pane: 'pane_MapadeSuelos_1',
+                pane: 'pane_MapadeSuelos_0',
                 opacity: 1,
                 color: 'rgba(255,35,35,1.0)',
                 dashArray: '',
@@ -78,43 +80,91 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_MapadeSuelos_1');
-        map.getPane('pane_MapadeSuelos_1').style.zIndex = 401;
-        map.getPane('pane_MapadeSuelos_1').style['mix-blend-mode'] = 'normal';
-        var layer_MapadeSuelos_1 = new L.geoJson(json_MapadeSuelos_1, {
+        map.createPane('pane_MapadeSuelos_0');
+        map.getPane('pane_MapadeSuelos_0').style.zIndex = 400;
+        map.getPane('pane_MapadeSuelos_0').style['mix-blend-mode'] = 'normal';
+        var layer_MapadeSuelos_0 = new L.geoJson(json_MapadeSuelos_0, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_MapadeSuelos_1',
-            layerName: 'layer_MapadeSuelos_1',
-            pane: 'pane_MapadeSuelos_1',
-            onEachFeature: pop_MapadeSuelos_1,
-            style: style_MapadeSuelos_1_0,
+            dataVar: 'json_MapadeSuelos_0',
+            layerName: 'layer_MapadeSuelos_0',
+            pane: 'pane_MapadeSuelos_0',
+            onEachFeature: pop_MapadeSuelos_0,
+            style: style_MapadeSuelos_0_0,
         });
-        bounds_group.addLayer(layer_MapadeSuelos_1);
-        map.addLayer(layer_MapadeSuelos_1);
+        bounds_group.addLayer(layer_MapadeSuelos_0);
+        map.addLayer(layer_MapadeSuelos_0);
+        function pop_Lotes_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(feature.properties['id'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Lote'] !== null ? autolinker.link(feature.properties['Lote'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Superficie'] !== null ? autolinker.link(feature.properties['Superficie'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Mostrar'] !== null ? autolinker.link(feature.properties['Mostrar'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Sup2'] !== null ? autolinker.link(feature.properties['Sup2'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Lotes_1_0() {
+            return {
+                pane: 'pane_Lotes_1',
+                opacity: 1,
+                color: 'rgba(35,35,35,1.0)',
+                dashArray: '',
+                lineCap: 'square',
+                lineJoin: 'bevel',
+                weight: 1.0,
+                fillOpacity: 0,
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Lotes_1');
+        map.getPane('pane_Lotes_1').style.zIndex = 401;
+        map.getPane('pane_Lotes_1').style['mix-blend-mode'] = 'normal';
+        var layer_Lotes_1 = new L.geoJson(json_Lotes_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Lotes_1',
+            layerName: 'layer_Lotes_1',
+            pane: 'pane_Lotes_1',
+            onEachFeature: pop_Lotes_1,
+            style: style_Lotes_1_0,
+        });
+        bounds_group.addLayer(layer_Lotes_1);
+        map.addLayer(layer_Lotes_1);
         setBounds();
         var i = 0;
-        layer_MapadeSuelos_1.eachLayer(function(layer) {
+        layer_MapadeSuelos_0.eachLayer(function(layer) {
             var context = {
                 feature: layer.feature,
                 variables: {}
             };
-            layer.bindTooltip((layer.feature.properties['Name'] !== null?String('<div style="color: #ff0000; font-size: 10pt; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['Name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_MapadeSuelos_1'});
+            layer.bindTooltip((layer.feature.properties['Name'] !== null?String('<div style="color: #ff0000; font-size: 10pt; font-family: \'MS Shell Dlg 2\', sans-serif;">' + layer.feature.properties['Name']) + '</div>':''), {permanent: true, offset: [-0, -16], className: 'css_MapadeSuelos_0'});
             labels.push(layer);
             totalMarkers += 1;
               layer.added = true;
               addLabel(layer, i);
               i++;
         });
-        resetLabels([layer_MapadeSuelos_1]);
+        resetLabels([layer_MapadeSuelos_0]);
         map.on("zoomend", function(){
-            resetLabels([layer_MapadeSuelos_1]);
+            resetLabels([layer_MapadeSuelos_0]);
         });
         map.on("layeradd", function(){
-            resetLabels([layer_MapadeSuelos_1]);
+            resetLabels([layer_MapadeSuelos_0]);
         });
         map.on("layerremove", function(){
-            resetLabels([layer_MapadeSuelos_1]);
+            resetLabels([layer_MapadeSuelos_0]);
         });
         </script>
     </body>
